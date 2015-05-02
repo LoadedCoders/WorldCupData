@@ -1,0 +1,9 @@
+#Sat Apr 25 15:44:19 EDT 2015
+srcTextAnalyticsPath=[P]textAnalytics/src
+general.provenance=true
+pagination.isEnabled=true
+tamTextAnalyticsPath=[P]textAnalytics/bin
+searchPath.dataPath=[W]/WorldCupData
+UseModularAQL=true
+pagination.numFilesPerPage=50
+langWare.tokenizerChoice=1
