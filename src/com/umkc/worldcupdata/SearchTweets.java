@@ -124,6 +124,7 @@ public class SearchTweets {
 			Status t = (Status) tweets.get(i);
 			Tweet tweet = new Tweet(t);
 			JSONObject object = tweet.getJSONObject();
+			HBaseHelper.put(tweet);
 			
 			tweetsJsonArray.put(object);
 			
