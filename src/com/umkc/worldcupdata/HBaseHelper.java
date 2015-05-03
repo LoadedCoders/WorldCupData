@@ -1,7 +1,9 @@
 package com.umkc.worldcupdata;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
-import org.apache.derby.iapi.sql.dictionary.TableDescriptor;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -14,11 +16,15 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import twitter4j.JSONException;
+import twitter4j.JSONObject;
+
 public class HBaseHelper {
 
 	
 	private static Configuration configuration;
-
+	private static HBaseAdmin sAdmin;
+	
 	/**
 	 * @param args
 	 * @throws IOException
@@ -27,26 +33,33 @@ public class HBaseHelper {
 	 */
 	public static void main(String[] args) throws MasterNotRunningException,
 			ZooKeeperConnectionException, IOException {
-		// TODO Auto-generated method stub
-
+		
 		configuration = HBaseConfiguration.create();
-		HBaseAdmin admin = new HBaseAdmin(configuration);
+		sAdmin = new HBaseAdmin(configuration);
 
-		if(admin.tableExists("employee")) {
-			// Getting all the list of tables using HBaseAdmin object
-			listTables(admin);
-			
-			put(null, admin);
-			return;
+		if(sAdmin.tableExists(WCSchema.TABLE_NAME)) {
+			listTables(sAdmin);
+		} else {
+			setup(WCSchema.TABLE_NAME, WCSchema.ColumnFamilies, sAdmin);
+		}
+	}
+	
+	public static void setup(String tableName, HashMap<String, String[]> columnFamilies, HBaseAdmin admin) throws IOException {
+		HTableDescriptor descriptor = new HTableDescriptor(
+				TableName.valueOf(tableName));
+		Set<String>keysSet = columnFamilies.keySet();
+		
+		for (Iterator iterator = keysSet.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			descriptor.addFamily(new HColumnDescriptor(string));
+//			String[] columns = columnFamilies.get(string);
+//			for (int i = 0; i < columns.length; i++) {
+//				String col = columns[i];
+//				descriptor.addFamily(new HColumnDescriptor(col));
+//			}
 		}
 		
-		HTableDescriptor descriptor = new HTableDescriptor(
-				TableName.valueOf("employee"));
-		descriptor.addFamily(new HColumnDescriptor("personal data"));
-		descriptor.addFamily(new HColumnDescriptor("professional data"));
-
 		admin.createTable(descriptor);
-		
 		admin.close();
 	}
 	
@@ -59,16 +72,14 @@ public class HBaseHelper {
 		}
 	}
 	
-	public static void put(Put put, HBaseAdmin admin) throws IOException {
+	public static void put(HBaseAdmin admin, JSONObject tweet) throws IOException, JSONException {
 		// Instantiating HTable class
-	      HTable hTable = new HTable(configuration, "employee");
+	      HTable hTable = new HTable(configuration, WCSchema.TABLE_NAME);
 
 	      // Instantiating Put class
 	      // accepts a row name.
-	      Put p = new Put(Bytes.toBytes("111")); 
-
-	      // adding values using add() method
-	      // accepts column family name, qualifier/row name ,value
+	      Put p = new Put(Bytes.toBytes(tweet.getInt("id"))); 
+	      
 	      p.add(Bytes.toBytes("personal data"),
 	      Bytes.toBytes("name"),Bytes.toBytes("pradyumna"));
 
@@ -90,6 +101,10 @@ public class HBaseHelper {
 	}
 	
 	public void scan(String tableName, HBaseAdmin admin) {
+		
+	}
+	
+	public void drop(String tableName, HBaseAdmin admin) {
 		
 	}
 }

@@ -53,7 +53,7 @@ public class SearchTweets {
 	public static void main(String[] args) throws IOException, JSONException {
 
 		String path = AppConstants.HDFS_URI + AppConstants.HDFS_DIR
-				+ "tweets.txt";
+				+ "tweets.json";
 
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
@@ -64,7 +64,7 @@ public class SearchTweets {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 			Date date = new Date();
 			path = AppConstants.HDFS_URI + AppConstants.HDFS_DIR + "tweets"
-					+ dateFormat.format(date) + ".txt";
+					+ dateFormat.format(date) + ".json";
 			outFile = new Path(path);
 
 			System.out.println(dateFormat.format(date)); // 2014/08/06-15:59:48
@@ -87,7 +87,7 @@ public class SearchTweets {
 		Query query = new Query("#cwc15 OR #WorldCup15 OR @ICC OR @cricketworldcup OR @ICCLive");
 		query.setSince("2015-01-10");
 		
-		int numberOfTweets = 10000;
+		int numberOfTweets = 3;
 		long lastID = Long.MAX_VALUE;
 		ArrayList<Status> tweets = new ArrayList<Status>();
 		
@@ -122,47 +122,15 @@ public class SearchTweets {
 		
 		for (int i = 0; i < tweets.size(); i++) {
 			Status t = (Status) tweets.get(i);
-
-			GeoLocation loc = t.getGeoLocation();
-
-			String user = t.getUser().getScreenName();
-			String msg = t.getText();
-			JSONObject object = new JSONObject();
-			object.put("id", t.getId());
-			object.put("user", user);
-			object.put("message", msg);
-			object.put("favs", t.getFavoriteCount());
-			object.put("retweets", t.getRetweetCount());
-			object.put("lang", t.getLang());
-			
-			MediaEntity[]entities = t.getMediaEntities();
-			if (entities.length > 0) {
-				object.put("mediaurl", entities[0].getMediaURL());
-			}
-			object.put("profilelink.color", t.getUser().getProfileLinkColor());
-			object.put("user.location", t.getUser().getLocation());
-			if (loc != null) {				
-				object.put("location", loc.getLatitude()+","+loc.getLongitude());
-			}
-			object.put("source", t.getSource());
+			Tweet tweet = new Tweet(t);
+			JSONObject object = tweet.getJSONObject();
 			
 			tweetsJsonArray.put(object);
 			
-//			String jsonString = object.toString();
-//			out.writeChars(jsonString.trim()+",");
-			
 			System.out.println(object.toString());
 			
-//			if (loc != null) {
-//				Double lat = t.getGeoLocation().getLatitude();
-//				Double lon = t.getGeoLocation().getLongitude();
-//				System.out.println(i + " USER: " + user + " wrote: " + msg
-//						+ " located at " + lat + ", " + lon);
-//			} else {
-//				System.out.println(i + " USER: " + user + " wrote: " + msg);
-//			}
 		}
-		out.writeChars(tweetsJsonArray.toString().trim());	
+		out.writeUTF(tweetsJsonArray.toString().trim());	
 		out.close();
 	}
 }
