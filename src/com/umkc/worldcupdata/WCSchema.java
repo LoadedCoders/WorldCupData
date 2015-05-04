@@ -3,7 +3,7 @@ package com.umkc.worldcupdata;
 import java.util.HashMap;
 
 public abstract class WCSchema {
-	public static String TABLE_NAME = "wctweets";
+	public static String TABLE_NAME = "tweets_poc";
 	
 	public static final String[] StatusColumns = {
 		"id",
@@ -35,8 +35,7 @@ public abstract class WCSchema {
 	static {
 		ColumnFamilies.put("Status", StatusColumns);
 		ColumnFamilies.put("User", UserColumns);
-		ColumnFamilies.put("Team", TeamColumns);
-		ColumnFamilies.put("Player", PlayerColumns);
+		
 	}
 	
 	public String[] FAMILIES = {
