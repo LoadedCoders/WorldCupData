@@ -73,9 +73,9 @@ public final class TwitterStreamService {
 				
 				counter++;
 				System.out.println(counter);
-				if (counter >= count) {
-					twitterStream.shutdown();
-				}
+//				if (counter >= count) {
+//					twitterStream.shutdown();
+//				}
 			}
 
 			@Override
