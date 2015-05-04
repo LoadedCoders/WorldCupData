@@ -49,7 +49,6 @@ public class HBaseHelper {
 	public static void main(String[] args) throws IOException {
 
 		if (sAdmin.tableExists(WCSchema.TABLE_NAME)) {
-			testPut();
 			listTables(sAdmin);
 		} else {
 			setup(WCSchema.TABLE_NAME, WCSchema.ColumnFamilies, sAdmin);
@@ -107,6 +106,7 @@ public class HBaseHelper {
 	public static void put(Tweet t)
 			throws IOException, JSONException {
 		// Instantiating HTable class
+		
 		HTable hTable = new HTable(configuration, WCSchema.TABLE_NAME);
 
 		String rowKey = t.id+"";
