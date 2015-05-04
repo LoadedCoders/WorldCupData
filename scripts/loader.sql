@@ -1,43 +1,59 @@
 CREATE EXTERNAL TABLE TEST_MAP(
-TWEET_ID STRING,   
-CREATED_AT STRING,  ---
-FAVORITED STRING,   ---
-FAVS STRING,
-GEO_LATITUDE STRING,
-GEO_LONGITUDE STRING,
-ID STRING,    ----
+tweet_id STRING,   
+created_at STRING,
+favorited BOOLEAN,
+favs INT,
+sentiment STRING,
+geo_latitude DOUBLE,
+geo_longitude DOUBLE,
+id STRING,    
 lang STRING,
+hashtags STRING,
 mediaURL STRING,
-message STRING,   ---
-retweeted STRING,   --
-retweets STRING,   ---
-source STRING,     ---
+place STRING,
+message STRING,  
+retweeted BOOLEAN,
+retweets BIGINT,   
+source STRING,     
 u_description STRING,
-u_followers_count,
+u_followers_count BIGINT,
 u_handle STRING,
 u_id BIGINT,
+u_name STRING,
 u_lang STRING,
 u_location STRING,
 u_profile_image_url STRING,
 u_status_count BIGINT,
-U_timezone STRING,
-
-
-) 
+u_timezone STRING,
+u_createdat TIMESTAMP) 
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
 WITH SERDEPROPERTIES (
 "hbase.columns.mapping" = 
 ":key,
-Status:message,
+Status:created_at,
+Status:favorited,
 Status:favs,
+Status:sentiment,
+Status:geo_latitude,
+Status:geo_longitude,
+Status:id,
+Status:lang,
+Status:hashtags,
+Status:mediaURL,
+Status:place,
+Status:message,
+Status:retweeted,
 Status:retweets,
 Status:source,
-Status:lang,
-User:id,
+User:description,
+User:followers_count,
 User:handle,
+User:id,
 User:name,
+User:lang,
 User:location,
-Team:country_mentioned,
-Team:match_mentioned") 
-TBLPROPERTIES(
-"hbase.table.name" = "wc15");
+User:profile_image_url,
+User:status_count,
+User:timezone STRING,
+User:created_at") 
+TBLPROPERTIES("hbase.table.name" = "tweets_poc");
