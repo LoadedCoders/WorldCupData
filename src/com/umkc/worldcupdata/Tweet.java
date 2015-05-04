@@ -5,6 +5,7 @@ import twitter4j.HashtagEntity;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
 import twitter4j.MediaEntity;
+import twitter4j.Place;
 import twitter4j.Status;
 
 public class Tweet {
@@ -46,7 +47,10 @@ public class Tweet {
 		favorite_count = status.getFavoriteCount();
 		id = status.getId();
 		text = status.getText();
-		place = status.getPlace().getName(); //Can take more data from this
+		Place pl = status.getPlace();
+		if (pl != null) {			
+			place = pl.getName(); //Can take more data from this
+		}
 		lang = status.getLang();
 		
 		HashtagEntity[]hashtagEntities = status.getHashtagEntities();

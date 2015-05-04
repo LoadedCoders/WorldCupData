@@ -30,10 +30,10 @@ import twitter4j.conf.ConfigurationBuilder;
  * @author Yusuke Yamamoto - yusuke at mac.com
  */
 public final class TwitterStreamService {
-	static String CONSUMER_KEY = "pYNx0BHpgaggM6MAwLYST0NO2";
-	static String CONSUMER_SECRET = "v4fG77iBdxP4bisUWLP0axcu01DhBnPJBYdLok3MOY1qFyEM8r";
-	static String ACCESS_KEY = "175311186-u7n86qdwGD9K3XoIwlXFEP4SJsm30Yypdk7f8sbS";
-	static String ACCESS_SECRET = "yWfYy8DA7IdMnK5ScMqogSbT6HRDTdbcW2pNXDuVASNCA";
+	static String CONSUMER_KEY = "XmuCJg6wqok0kM4atoBWyzX70";
+	static String CONSUMER_SECRET = "M791X1Py0jy52DG2f18EsxS0CYaMJhOfEZykO8H3mOLmfMXOBD";
+	static String ACCESS_KEY = "66398818-wqoEXxQRTtb5GS24eqvn4DS5yQHIfay0NkgN3YDed";
+	static String ACCESS_SECRET = "xP3IHuIaGJAuDES88Mt6TuxVEz3oSDz5AlYOgtZ7MEZD1";
 
 	/**
 	 * Main entry of this application.
@@ -51,8 +51,7 @@ public final class TwitterStreamService {
 		cb.setDebugEnabled(true).setOAuthConsumerKey(CONSUMER_KEY)
 				.setOAuthConsumerSecret(CONSUMER_SECRET)
 				.setOAuthAccessToken(ACCESS_KEY)
-				.setOAuthAccessTokenSecret(ACCESS_SECRET)
-				.setJSONStoreEnabled(true);
+				.setOAuthAccessTokenSecret(ACCESS_SECRET);
 
 		final TwitterStream twitterStream = new TwitterStreamFactory(cb.build())
 				.getInstance();
