@@ -25,7 +25,7 @@ u_location STRING,
 u_profile_image_url STRING,
 u_status_count BIGINT,
 u_timezone STRING,
-u_createdat TIMESTAMP) 
+u_createdate TIMESTAMP) 
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
 WITH SERDEPROPERTIES (
 "hbase.columns.mapping" = 
