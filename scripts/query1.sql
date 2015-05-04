@@ -2,7 +2,7 @@
 --set hive.execution.engine=tez;
 
 --top tweets based on language
-select u_lang,count(*) as count from TEST_poc group by(u_lang) order by count desc
+select u_lang,count(*) as count from TEST_poc group by(u_lang) order by count desc LIMIT 10;
 
 
 --top tweets based on location
@@ -13,7 +13,7 @@ select u_name,u_id,retweets from TEST_poc where message LIKE '%IPL%' order by re
 --(as our tweet data has retweeted as false for all tweets,we cannot so analysis on retweets on data)
 --treading tweet topics
 
-select count(*) as count from TEST_poc where message LIKE '%Nepal earth quake%' 
+select count(*) as count from TEST_poc where message LIKE '%Nepal earth quake|nepalearthquake%' 
 
 create table Results(topic string,score int)
 
