@@ -4,15 +4,35 @@
 --top tweets based on language
 select u_lang,count(*) as count from TEST_poc group by(u_lang) order by count desc LIMIT 10;
 
+set hive.exec.compress.output=false;
+set hive.cli.print.header=true;
+create table top_languages ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' as
+select u_lang,count(*) as count from TEST_poc group by(u_lang) order by count desc LIMIT 20;
+--saving in hadoop
+hadoop fs -cat /biginsights/hive/warehouse/top_languages/* > top_languages.csv
 
---top tweets based on location
+
+--top tweets based on user_location
 select u_location,count(*) as count from TEST_poc group by(u_location) order by count desc LIMIT 10;
 
+set hive.exec.compress.output=false;
+set hive.cli.print.header=true;
+create table top_languages ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' as
+select u_location,count(*) as count from TEST_poc group by(u_location) order by count desc LIMIT 20;
+
+--saving in hadoop
+hadoop fs -cat /biginsights/hive/warehouse/top_locations/* > top_locations.csv
+
+
 ---top users --
-select u_name,count(*) as count from TEST_poc group by(u_name) order by count desc LIMIT 10;
+select u_name,message,u_profile_image_url,count(*) as count from TEST_poc 
+group by u_name,message,u_profile_image_url order by count desc LIMIT 10;
 
 ---top hashtags ---
 select u_hashtags,count(*) as count from TEST_poc group by(u_hashtags) order by count desc LIMIT 10;
+
+---top tweets from places---
+select place,count(*) as count from TEST_poc group by place order by count desc limit 10;
 
 ---seaarchinnng hash tag with topic---
 select hashtags,count from 
@@ -20,15 +40,18 @@ select hashtags,count from
 where a.hashtags LIKE '%love' order by a.count desc LIMIT 10;
 
 
-----getting most tweeted user for given hash tag
+----getting most tweeted user for given <hash tag>
 
-select u_name,hashtags,count(*) as count from TEST_poc where hashtags like '%followmeskip%' 
-group by u_name order by count desc LIMIT 10
+select u_name,hashtags,count(*) as count from TEST_poc where hashtags like 'followmeskip' 
+group by u_name,hashtags order by count desc LIMIT 10;
 
  
-select u_name,count(*) as count from TEST_poc where hashtags like '%followmeskip%' group by u_name order by count desc LIMIT 10
-UNION ALL
-select u_name,count(*) as count from TEST_poc where hashtags like '%starwar%' group by u_name order by count desc LIMIT 10 
+
+select u_name,hashtags,count(*) as count from TEST_poc 
+where hashtags like '%followmeskip%' group by u_name,hashtags order by count desc LIMIT 10
+UNION
+select u_name,hashtags,count(*) as count from TEST_poc 
+where hashtags like '%starwar%' group by u_name,hashtags order by count desc LIMIT 10; 
 
 
 --top tweets regarding topic %topic% 
