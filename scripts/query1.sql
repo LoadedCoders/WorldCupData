@@ -24,9 +24,21 @@ select u_location,count(*) as count from TEST_poc group by(u_location) order by 
 hadoop fs -cat /biginsights/hive/warehouse/top_locations/* > top_locations.csv
 
 
----top users --
-select u_name,message,u_profile_image_url,count(*) as count from TEST_poc 
-group by u_name,message,u_profile_image_url order by count desc LIMIT 10;
+---top users based on tweets--
+select u_name,message,count(*) as count from TEST_poc 
+group by u_name,message order by count desc LIMIT 10;
+
+
+set hive.exec.compress.output=false;
+set hive.cli.print.header=true;
+create table top_tweet_user ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' as
+select u_name,message,count(*) as count from TEST_poc 
+group by u_name,message order by count desc LIMIT 20;
+
+--saving in hadoop
+hadoop fs -cat /biginsights/hive/warehouse/top_tweet_user/* > top_tweet_user.csv
+
+
 
 ---top hashtags ---
 select u_hashtags,count(*) as count from TEST_poc group by(u_hashtags) order by count desc LIMIT 10;
